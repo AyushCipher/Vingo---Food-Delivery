@@ -16,7 +16,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import AddItem from './pages/AddItem'
-import EditItem from './pages/editItem'
+import EditItem from './pages/EditItem'
 import useGetShopsByCity from "./hooks/useGetShopsByCity";
 import getItemsByCity from './hooks/getItemsByCity'
 import CartPage from './pages/CartPage'
