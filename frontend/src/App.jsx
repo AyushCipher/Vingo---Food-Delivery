@@ -32,7 +32,10 @@ import MyDeliveredOrders from './pages/MyDeliveredOrders'
 import ShopItems from './pages/ShopItems'
 import ProductDetails from './pages/ProductDetails'
 
-export const serverUrl = "https://vingo-food-delivery-zvzq.onrender.com" || "http://localhost:8000"
+// Use Vite's built-in env detection - import.meta.env.DEV is true in development
+export const serverUrl = import.meta.env.DEV 
+  ? "http://localhost:8000" 
+  : "https://vingo-food-delivery-zvzq.onrender.com"
 
 
 function App() {

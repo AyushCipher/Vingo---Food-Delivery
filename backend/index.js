@@ -18,7 +18,6 @@ import { sendMail } from "./config/mail.js";
 dotenv.config()
 
 const port = process.env.PORT || 5000
-const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173"
 const app = express()
 
 // Trust proxy for secure cookies behind Render's reverse proxy
@@ -28,11 +27,11 @@ if (process.env.NODE_ENV === "production") {
 
 const server = http.createServer(app)
 
+// Allowed origins for CORS - includes both dev and production URLs
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://vingo-8134.onrender.com",
-  frontendUrl
-].filter(Boolean);
+  "https://vingo-8134.onrender.com"
+];
 
 const io = new Server(server,{
   cors: {
