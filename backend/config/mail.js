@@ -9,6 +9,18 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: process.env.EMAIL,
     pass: process.env.EMAIL_PASS,
+  },
+  debug: true,
+  logger: true
+});
+
+// Verify transporter on startup
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("❌ Email transporter verification failed:", error.message);
+    console.error("Check EMAIL and EMAIL_PASS environment variables");
+  } else {
+    console.log("✅ Email server is ready to send messages");
   }
 });
 
@@ -67,7 +79,9 @@ export const sendMail = async (to, otp) => {
 
 
 export const sendOtpToUser = async (user, otp) => {
-  await transporter.sendMail({
+  console.log(`📧 Attempting to send OTP to: ${user.email}`);
+  
+  const info = await transporter.sendMail({
     from: `"Vingo Orders" <${process.env.EMAIL}>`,
     to: user.email,
     subject: "🛵 Vingo Delivery OTP",
@@ -111,5 +125,8 @@ export const sendOtpToUser = async (user, otp) => {
     </div>
     `
   });
+  
+  console.log(`✅ OTP email sent successfully. Message ID: ${info.messageId}`);
+  return info;
 };
 
