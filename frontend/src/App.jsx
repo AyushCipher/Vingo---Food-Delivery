@@ -32,7 +32,7 @@ import MyDeliveredOrders from './pages/MyDeliveredOrders'
 import ShopItems from './pages/ShopItems'
 import ProductDetails from './pages/ProductDetails'
 
-export const serverUrl="http://localhost:8000"
+export const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:8000"
 
 
 function App() {
