@@ -5,7 +5,22 @@ import Shop from "../models/shop.model.js";
 
 export const addItem = async (req, res) => {
   try {
-    const { name, category, type, price } = req.body;
+    const { 
+      name, 
+      category, 
+      type, 
+      price,
+      description,
+      ingredients,
+      preparationTime,
+      servingSize,
+      spiceLevel,
+      allergens,
+      calories,
+      protein,
+      carbs,
+      fat
+    } = req.body;
     
     const shop = await Shop.findOne({ owner: req.userId });
     if (!shop) {
@@ -21,6 +36,21 @@ export const addItem = async (req, res) => {
     } else {
       return res.status(400).json({ message: "Image is required" });
     }
+
+    // Parse ingredients and allergens from JSON string
+    let parsedIngredients = [];
+    let parsedAllergens = [];
+    
+    try {
+      if (ingredients) {
+        parsedIngredients = JSON.parse(ingredients);
+      }
+      if (allergens) {
+        parsedAllergens = JSON.parse(allergens);
+      }
+    } catch (e) {
+      console.log("Error parsing ingredients/allergens:", e);
+    }
     
     const item = await Item.create({
       name,
@@ -29,6 +59,18 @@ export const addItem = async (req, res) => {
       image,
       price,
       shop: shop._id,
+      description: description || "",
+      ingredients: parsedIngredients,
+      preparationTime: preparationTime || 15,
+      servingSize: servingSize || "1 serving",
+      spiceLevel: spiceLevel || "",
+      allergens: parsedAllergens,
+      nutritionInfo: {
+        calories: calories || 0,
+        protein: protein || "",
+        carbs: carbs || "",
+        fat: fat || "",
+      },
     });
 
     shop.items.push(item._id);
@@ -104,7 +146,7 @@ export const getItemsByCity = async (req, res) => {
 export const getItemById = async (req, res) => {
   try {
     const { itemId } = req.params;
-    const item = await Item.findById(itemId);
+    const item = await Item.findById(itemId).populate("shop", "name city address");
     
     if (!item) {
       return res.status(400).json({ message: "Item not found" });
@@ -119,7 +161,22 @@ export const getItemById = async (req, res) => {
 
 export const editItem = async (req, res) => {
   try {
-    const { name, category, type, price } = req.body;
+    const { 
+      name, 
+      category, 
+      type, 
+      price,
+      description,
+      ingredients,
+      preparationTime,
+      servingSize,
+      spiceLevel,
+      allergens,
+      calories,
+      protein,
+      carbs,
+      fat
+    } = req.body;
     const { itemId } = req.params;
 
     let image;
@@ -127,14 +184,47 @@ export const editItem = async (req, res) => {
       image = await uploadOnCloudinary(req.file.path);
     }
 
-    const item = await Item.findByIdAndUpdate( itemId,
-      {
-        name,
-        category,
-        type,
-        price,
-        image,
+    // Parse ingredients and allergens from JSON string
+    let parsedIngredients = [];
+    let parsedAllergens = [];
+    
+    try {
+      if (ingredients) {
+        parsedIngredients = JSON.parse(ingredients);
+      }
+      if (allergens) {
+        parsedAllergens = JSON.parse(allergens);
+      }
+    } catch (e) {
+      console.log("Error parsing ingredients/allergens:", e);
+    }
+
+    const updateData = {
+      name,
+      category,
+      type,
+      price,
+      description: description || "",
+      ingredients: parsedIngredients,
+      preparationTime: preparationTime || 15,
+      servingSize: servingSize || "1 serving",
+      spiceLevel: spiceLevel || "",
+      allergens: parsedAllergens,
+      nutritionInfo: {
+        calories: calories || 0,
+        protein: protein || "",
+        carbs: carbs || "",
+        fat: fat || "",
       },
+    };
+
+    if (image) {
+      updateData.image = image;
+    }
+
+    const item = await Item.findByIdAndUpdate(
+      itemId,
+      updateData,
       { new: true }
     );
 

@@ -126,11 +126,29 @@ const userSlice = createSlice({
     setSearchItems: (state, action) => {
       state.searchItems = action.payload;
     },
+
+    updateItemRating: (state, action) => {
+      const { itemId, rating } = action.payload;
+      // Update in itemsOfCity
+      if (state.itemsOfCity) {
+        const itemIndex = state.itemsOfCity.findIndex(item => item._id === itemId);
+        if (itemIndex !== -1) {
+          state.itemsOfCity[itemIndex].rating = rating;
+        }
+      }
+      // Update in searchItems if present
+      if (state.searchItems) {
+        const searchIndex = state.searchItems.findIndex(item => item._id === itemId);
+        if (searchIndex !== -1) {
+          state.searchItems[searchIndex].rating = rating;
+        }
+      }
+    },
   }
 
 })
 
 export const {setUserData, setCity, setAllShops, setShop, setShopsOfCity, setItemsOfCity, addToCart, 
-  updateQuantity, removeFromCart, clearCart, setMyOrders, setOwnerPendingOrders, setSocket, setDeliveryBoys, setSearchItems, setPendingOrdersCount} = userSlice.actions
+  updateQuantity, removeFromCart, clearCart, setMyOrders, setOwnerPendingOrders, setSocket, setDeliveryBoys, setSearchItems, setPendingOrdersCount, updateItemRating} = userSlice.actions
 
 export default userSlice.reducer

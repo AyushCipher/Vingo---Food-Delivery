@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { serverUrl } from "../App";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -12,6 +13,8 @@ export default function ForgotPassword() {
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const primaryColor = "#ff4d2d";
@@ -148,25 +151,43 @@ export default function ForgotPassword() {
               New Password
             </label>
 
-            <input
-              type="password"
-              placeholder="Enter new password"
-              className="w-full border rounded-lg px-3 py-2 mb-4"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
+            <div className="relative mb-4">
+              <input
+                type={showNewPassword ? "text" : "password"}
+                placeholder="Enter new password"
+                className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:border-orange-500"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowNewPassword(!showNewPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
 
             <label className="block text-gray-700 font-medium mb-1">
               Confirm Password
             </label>
 
-            <input
-              type="password"
-              placeholder="Confirm password"
-              className="w-full border rounded-lg px-3 py-2 mb-4"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
+            <div className="relative mb-4">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirm password"
+                className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:border-orange-500"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
 
             <button
               type="button"

@@ -189,9 +189,12 @@ export const resetPassword = async (req, res) => {
       return res.status(404).json({ message: "OTP verification required" });
     }
 
-    const isSamePassword = await bcrypt.compare(password, user.password);
-    if (isSamePassword) {
-      return res.status(400).json({ message: "New password cannot be same as old password" });
+    // Only check if password is same when user has an existing password (not Google auth users)
+    if (user.password) {
+      const isSamePassword = await bcrypt.compare(password, user.password);
+      if (isSamePassword) {
+        return res.status(400).json({ message: "New password cannot be same as old password" });
+      }
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);

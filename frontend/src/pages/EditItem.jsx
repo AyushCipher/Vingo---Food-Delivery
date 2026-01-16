@@ -21,6 +21,7 @@ export default function EditItem() {
   const [type, setType] = useState("veg");
   const [frontendImage, setFrontendImage] = useState(null);
   const [backendImage, setBackendImage] = useState(null);
+  const [description, setDescription] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -50,6 +51,7 @@ export default function EditItem() {
       formData.append("price", price);
       formData.append("type", type);
       formData.append("category", category);
+      formData.append("description", description);
 
       if (backendImage) {
         formData.append("image", backendImage);
@@ -127,6 +129,7 @@ export default function EditItem() {
       setFrontendImage(selectedItem.image);
       setCategory(selectedItem.category);
       setType(selectedItem.type);
+      setDescription(selectedItem.description || "");
     }
   }, [selectedItem]);
 
@@ -225,6 +228,19 @@ export default function EditItem() {
               <option value="veg">Veg</option>
               <option value="non veg">Non Veg</option>
             </select>
+          </div>
+
+
+          {/* Description */}
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">Description</label>
+            <textarea
+              value={description}
+              placeholder="Enter product description..."
+              onChange={(e) => setDescription(e.target.value)}
+              rows={3}
+              className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-[#ff4d2d] outline-none resize-none"
+            />
           </div>
 
 
