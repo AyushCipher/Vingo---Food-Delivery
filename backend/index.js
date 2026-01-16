@@ -18,7 +18,7 @@ import { sendMail } from "./config/mail.js";
 dotenv.config()
 
 const port = process.env.PORT || 5000
-const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173"
+const frontendUrl = "https://vingo-8134.onrender.com" || "http://localhost:5173"
 const app = express()
 const server = http.createServer(app)
 const io = new Server(server,{
