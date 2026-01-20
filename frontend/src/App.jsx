@@ -31,6 +31,7 @@ import TrackOrderPage from './pages/TrackOrderPage'
 import MyDeliveredOrders from './pages/MyDeliveredOrders'
 import ShopItems from './pages/ShopItems'
 import ProductDetails from './pages/ProductDetails'
+import NotFound from './pages/NotFound';
 
 // Use Vite's built-in env detection - import.meta.env.DEV is true in development
 export const serverUrl = import.meta.env.DEV 
@@ -93,6 +94,9 @@ function App() {
         <Route path="/track-order/:orderId" element={userData ? <TrackOrderPage /> : <Navigate to="/signin" />} />
         <Route path="/shop-items/:shopId" element={userData ? <ShopItems /> : <Navigate to="/signin" />} />
         <Route path="/product/:itemId" element={userData ? <ProductDetails /> : <Navigate to="/signin" />} />
+
+        {/* 404 Route - must be last */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       {/* ⭐ Toast works globally */}
